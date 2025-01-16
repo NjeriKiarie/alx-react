@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, css } from 'aphrodite';
 // import './Notifications.css';
-import closeIcon from './close-icon.png';
+import closeBtn from '../assets/close-btn.png';
 import NotificationItem from './NotificationItem';
 import NotificationItemShape from './NotificationItemShape';
 import PropTypes from 'prop-types';
@@ -83,8 +83,8 @@ class Notifications extends Component {
 							}}
 						>
 							<img
-								src={closeIcon}
-								alt='close icon'
+								src={closeBtn}
+								alt='X'
 								width='10px'
 								height='10px'
 							/>

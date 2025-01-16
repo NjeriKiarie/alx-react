@@ -27,14 +27,11 @@ describe('rendering components', () => {
 		];
 
 		const wrapper = shallow(
-			<Notifications
-				displayDrawer={true}
-				listNotifications={listNotifications}
-			/>
+			<Notifications displayDrawer={true}listNotifications={listNotifications} />
 		);
 		expect(wrapper.find('ul').children()).toHaveLength(3);
 		wrapper.find('ul').forEach((node) => {
-			expect(node.equals(<NotificationItem />));
+		expect(node.equals(<NotificationItem />));
 		});
 	});
 
@@ -46,10 +43,7 @@ describe('rendering components', () => {
 		];
 
 		const wrapper = shallow(
-			<Notifications
-				displayDrawer={true}
-				listNotifications={listNotifications}
-			/>
+			<Notifications displayDrawer={true} listNotifications={listNotifications} />
 		);
 
 		expect(wrapper.find('ul').childAt(0).html()).toEqual(

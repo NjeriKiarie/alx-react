@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, css } from 'aphrodite';
-// import './Notifications.css';
-import closeIcon from './close-icon.png';
+import closeBtn from '../assets/close-btn.png';
 import NotificationItem from './NotificationItem';
 import NotificationItemShape from './NotificationItemShape';
 import PropTypes from 'prop-types';
@@ -74,20 +73,13 @@ class Notifications extends Component {
 								<NotificationItem value='No new notification for now' />
 							)}
 						</ul>
-						<button
-							className={css(styles.button)}
-							aria-label='Close'
+						<button className={css(styles.button)} aria-label='Close'
 							onClick={() => {
 								console.log('Close button has been clicked');
 								handleHideDrawer();
 							}}
 						>
-							<img
-								src={closeIcon}
-								alt='close icon'
-								width='10px'
-								height='10px'
-							/>
+							<img src={closeBtn} alt='X' width='10px' height='10px' />
 						</button>
 					</div>
 				) : null}

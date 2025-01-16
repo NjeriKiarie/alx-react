@@ -26,25 +26,25 @@ describe('rendering components', () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it('App contains Notifications component', () => {
+	it('contains Notifications component', () => {
 		const wrapper = shallow(<App />);
 
 		expect(wrapper.find(Notifications)).toHaveLength(1);
 	});
 
-	it('App contains Header component', () => {
+	it('contains Header component', () => {
 		const wrapper = shallow(<App />);
 
 		expect(wrapper.contains(<Header />)).toBe(true);
 	});
 
-	it('App contains Login component', () => {
+	it('contains Login component', () => {
 		const wrapper = shallow(<App />);
 
-		expect(wrapper.contains(<Login />)).toBe(true);
+		expect(wrapper.find(Login)).toHaveLength(1);
 	});
 
-	it('App contains Footer component', () => {
+	it('contains Footer component', () => {
 		const wrapper = shallow(<App />);
 
 		expect(wrapper.contains(<Footer />)).toBe(true);
@@ -58,7 +58,8 @@ describe('rendering components', () => {
 });
 
 describe('when isLogged in is true', () => {
-	const wrapper = shallow(<App isLoggedIn={true} />);
+	const wrapper = shallow(<App />);
+	wrapper.setState({ user: { isLoggedIn: true } });
 
 	it('checks Login is not rendered', () => {
 		expect(wrapper.contains(<Login />)).toBe(false);
@@ -67,19 +68,38 @@ describe('when isLogged in is true', () => {
 	it('checks CourseList is rendered', () => {
 		expect(wrapper.find(CourseList)).toHaveLength(1);
 	});
+
+	it('checks that logIn updates state correctly', () => {
+		const wrapper = shallow(<App />);
+		wrapper.setState({
+			user: {
+				email: 'foo',
+				password: 'bar',
+				isLoggedIn: true,
+			},
+		});
+		expect(wrapper.state().user.email).toBe('foo');
+		expect(wrapper.state().user.password).toBe('bar');
+		expect(wrapper.state().user.isLoggedIn).toBe(true);
+	});
+
+	it('verifies that the logOut function updates the state correctly', () => {
+		const wrapper = shallow(<App />);
+		wrapper.setState({
+			user: {
+				email: 'foo',
+				password: 'bar',
+				isLoggedIn: true,
+			},
+		});
+		wrapper.state().logOut();
+		expect(wrapper.state().user.email).toBe('');
+		expect(wrapper.state().user.password).toBe('');
+		expect(wrapper.state().user.isLoggedIn).toBe(false);
+	});
 });
 
 describe('when Ctrl+h pressed', () => {
-	it('checks logOut function is called', () => {
-		const mockFn = jest.fn();
-		const wrapper = mount(<App logOut={mockFn} />);
-		const event = new KeyboardEvent('keydown', { ctrlKey: true, key: 'h' });
-
-		document.dispatchEvent(event);
-		expect(mockFn).toHaveBeenCalled();
-		wrapper.unmount();
-	});
-
 	window.alert = jest.fn();
 	it('checks alert function is called', () => {
 		const wrapper = mount(<App />);
@@ -124,5 +144,22 @@ describe('testing state of App.js', () => {
 		wrapper.instance().handleHideDrawer();
 
 		expect(wrapper.state().displayDrawer).toBe(false);
+	});
+});
+
+describe('markNotificationAsRead works as intended', () => {
+	it('should update array in state', () => {
+		const wrapper = mount(<App />);
+		wrapper.setState({
+			listNotifications: [
+				{ id: 1, type: 'default', value: 'New course available' },
+				{ id: 2, type: 'urgent', value: 'New resume available' },
+			],
+		});
+		wrapper.instance().markNotificationAsRead(1);
+		expect(wrapper.state().listNotifications).toEqual([
+			{ id: 2, type: 'urgent', value: 'New resume available' },
+		]);
+		expect(wrapper.state().listNotifications).toHaveLength(1);
 	});
 });
